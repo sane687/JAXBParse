@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<toDoList>
+    <task id="1" caption="Заголовок 1">
+        <description>Описание задачи</description>
+        <priority>100</priority>
+        <deadline>2017-02-12</deadline>
+        <status>done</status>
+        <complete>2017-02-19</complete>
+    </task>
+    <task  id="2" caption="Заголовок 2">
+        <description>Описание еще одной задачи</description>
+        <priority>10</priority>
+        <deadline>2022-02-12</deadline>
+        <status>new</status>
+    </task>
+    <task  id="3" caption="Заголовок 3">
+        <description>Описание задачи</description>
+        <priority>50</priority>
+        <deadline>2021-02-12</deadline>
+        <status>new</status>
+    </task>
+    <task id="4" caption="Заголовок 4">
+        <description>Описание задачи</description>
+        <priority>88</priority>
+        <deadline>2018-02-12</deadline>
+        <status>done</status>
+        <complete>2020-02-19</complete>
+    </task>
+</toDoList>
