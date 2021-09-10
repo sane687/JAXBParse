@@ -68,8 +68,8 @@ public class User {
                                 + "\"list\" get all tasks" + "\n"
                                 + "\"complete *task_id*\" set the task status to \"done\"" + "\n"
                                 + "\"new\" create new task with following parameters" + "\n"
-                                + "\"edit *task_id\" edit following parameters" + "\n"
-                                + "\"remove *task_id\" remove the task");
+                                + "\"edit *task_id*\" edit following parameters" + "\n"
+                                + "\"remove *task_id*\" remove the task");
                         break;
                     case ("list -s new"):
                         Commands.getNewTasks(toDoList);
@@ -85,10 +85,10 @@ public class User {
                             UserInput.caseNew(toDoList);
                         } catch (DateTimeParseException d) {
                             System.out.println("Please type correct date using pattern \"yyyy-MM-dd\"");
-                            break;
+                            continue;
                         } catch (IllegalArgumentException i) {
                             System.out.println("Priority must be between 1 and 100");
-                            break;
+                            continue;
                         }
                 }
                 if (s.contains("complete ")) {
@@ -97,7 +97,11 @@ public class User {
                     } catch (NumberFormatException n) {
                         System.out.println("Please type a number");
                         continue;
+                    }catch (IllegalArgumentException i) {
+                        System.out.println("Priority must be between 1 and 100");
+                        continue;
                     }
+
                 }
 
                 if (s.contains("edit ")) {
@@ -105,6 +109,9 @@ public class User {
                         UserInput.caseEdit(toDoList, Integer.parseInt(s.substring(5)));
                     } catch (NumberFormatException n) {
                         System.out.println("Please type a number");
+                        continue;
+                    }catch (IllegalArgumentException i) {
+                        System.out.println("Priority must be between 1 and 100");
                         continue;
                     }
                 }
@@ -114,6 +121,9 @@ public class User {
                         Commands.removeTask(toDoList, Integer.parseInt(s.substring(7)));
                     } catch (NumberFormatException n) {
                         System.out.println("Please type a number");
+                        continue;
+                    }catch (IllegalArgumentException i) {
+                        System.out.println("Priority must be between 1 and 100");
                         continue;
                     }
                 }

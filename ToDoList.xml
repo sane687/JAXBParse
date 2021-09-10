@@ -1,29 +1,29 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <toDoList>
-    <task id="1" caption="Заголовок 1">
-        <description>Описание задачи</description>
-        <priority>100</priority>
+    <task caption="Заголовок 1" id="1">
         <deadline>2017-02-12</deadline>
+        <description>Описание задачи 1</description>
+        <priority>100</priority>
         <status>done</status>
-        <complete>2017-02-19</complete>
     </task>
-    <task  id="2" caption="Заголовок 2">
-        <description>Описание еще одной задачи</description>
-        <priority>10</priority>
+    <task caption="Заголовок 2" id="2">
+        <complete>2021-09-10</complete>
         <deadline>2022-02-12</deadline>
-        <status>new</status>
-    </task>
-    <task  id="3" caption="Заголовок 3">
-        <description>Описание задачи</description>
-        <priority>50</priority>
-        <deadline>2021-02-12</deadline>
-        <status>new</status>
-    </task>
-    <task id="4" caption="Заголовок 4">
-        <description>Описание задачи</description>
-        <priority>88</priority>
-        <deadline>2018-02-12</deadline>
+        <description>Описание еще одной задачи 2</description>
+        <priority>10</priority>
         <status>done</status>
+    </task>
+    <task caption="Заголовок 3" id="3">
+        <deadline>2021-02-12</deadline>
+        <description>Описание задачи 3</description>
+        <priority>50</priority>
+        <status>new</status>
+    </task>
+    <task caption="Заголовок 4" id="4">
         <complete>2020-02-19</complete>
+        <deadline>2018-02-12</deadline>
+        <description>Описание задачи 4</description>
+        <priority>88</priority>
+        <status>done</status>
     </task>
 </toDoList>
