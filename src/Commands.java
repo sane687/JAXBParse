@@ -20,7 +20,7 @@ public class Commands {
         JAXBContext jaxbContext = JAXBContext.newInstance(ToDoList.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        marshaller.marshal(toDoList, new File("newList.xml"));
+        marshaller.marshal(toDoList, new File("ToDoList.xml"));
     }
 
     /**
