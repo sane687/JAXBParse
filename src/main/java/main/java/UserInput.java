@@ -1,3 +1,5 @@
+package main.java;
+
 import javax.xml.bind.JAXBException;
 import java.io.BufferedReader;
 import java.io.IOException;

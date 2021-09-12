@@ -1,3 +1,4 @@
+package main.java;
 
 import javax.xml.bind.annotation.*;
 import java.util.ArrayList;

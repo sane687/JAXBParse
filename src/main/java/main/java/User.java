@@ -1,3 +1,5 @@
+package main.java;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -17,7 +19,6 @@ public class User {
      * Вычисляется один раз во время запуска
      */
     private static int HIGHEST_ID;
-
 
     public static int getHIGHEST_ID() {
         return HIGHEST_ID;
