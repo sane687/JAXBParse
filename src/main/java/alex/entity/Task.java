@@ -13,8 +13,6 @@ import java.time.LocalDate;
  * Аннотацией "@XmlAttribute" почечены атрибуты задания
  */
 
-//@XmlRootElement(name = "task")
-//@XmlAccessorType(XmlAccessType.FIELD)
 public class Task {
 
     private String caption;
@@ -40,23 +38,6 @@ public class Task {
     }
 
     public Task(){}
-
-//    public Task(int id, String caption, String description, int priority, LocalDate deadline, String status, LocalDate complete) {
-//        this.id = id;
-//        this.caption = caption;
-//        this.description = description;
-//        this.priority = priority;
-//        this.deadline = deadline;
-//        this.status = status;
-//        this.complete = complete;
-//    }
-//
-//    public Task(int id, String caption, String description){
-//        this.id = id;
-//        this.caption = caption;
-//        this.description = description;
-//    }
-
 
 
     public void setId(int id) {

@@ -14,10 +14,11 @@
         <status>done</status>
     </task>
     <task caption="Заголовок 3" id="3">
+        <complete>2022-04-09</complete>
         <deadline>2021-02-12</deadline>
         <description>Описание задачи 3</description>
         <priority>50</priority>
-        <status>new</status>
+        <status>done</status>
     </task>
     <task caption="Заголовок 4" id="4">
         <complete>2020-02-19</complete>
@@ -25,5 +26,11 @@
         <description>Описание задачи 4</description>
         <priority>88</priority>
         <status>done</status>
+    </task>
+    <task caption="edit" id="5">
+        <deadline>2023-01-01</deadline>
+        <description>TEST EDIT</description>
+        <priority>100</priority>
+        <status>new</status>
     </task>
 </toDoList>

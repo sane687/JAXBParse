@@ -2,6 +2,7 @@ package alex.service;
 
 import alex.entity.Task;
 import alex.entity.ToDoList;
+import alex.exceptions.InputException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -44,28 +45,25 @@ public class Command {
     /**
      * Цикл с вводом комманд и значений пользователем
      */
-    public void run() throws IOException, JAXBException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void run() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         Method method;
 
         while (true){
             String inputLine = reader.readLine();
             String inputLetters = getLetters(inputLine);
 
-            System.out.println(inputLine);
-            System.out.println(inputLetters);
-
-            if(inputLine.equals(inputLetters)){
-                method = Command.class.getMethod(commandsAndMethodsMap.get(inputLine));
-                try{
+            try {
+                if (inputLine.equals(inputLetters)) {
+                    method = Command.class.getMethod(commandsAndMethodsMap.get(inputLine));
                     method.invoke(this);
-                }catch (InvocationTargetException exp){
-                    exp.printStackTrace();
+                } else {
+                    int id = findId(inputLine, inputLetters);
+                    if (id == 0) continue;
+                    method = Command.class.getMethod(commandsAndMethodsMap.get(inputLetters), int.class);
+                    method.invoke(this, id);
                 }
-            } else{
-                int id = findId(inputLine, inputLetters);
-                if (id==0) continue;
-                method = Command.class.getMethod(commandsAndMethodsMap.get(inputLetters), int.class);
-                method.invoke(this, id);
+            } catch (NoSuchMethodException | NullPointerException exp) {
+                System.err.println("incorrect command name. Use \"help\" command");
             }
         }
     }
@@ -91,8 +89,8 @@ public class Command {
                 + "\"list -s new\" get all new tasks" + "\n"
                 + "\"list -s done\" get all tasks with \"done\" status" + "\n"
                 + "\"list\" get all tasks" + "\n"
-                + "\"complete *task_id*\" set the task status to \"done\"" + "\n"
                 + "\"new\" create new task with following parameters" + "\n"
+                + "\"complete *task_id*\" set the task status to \"done\"" + "\n"
                 + "\"edit *task_id*\" edit following parameters" + "\n"
                 + "\"remove *task_id*\" remove the task");
     }
@@ -130,11 +128,8 @@ public class Command {
         Task task = new Task();
         try{
             userInput.inputParams(task);
-        } catch (IllegalArgumentException argExp){
-            System.out.println("priority must be between 1 and 100");
-            return;
-        } catch (DateTimeParseException dateExp){
-            System.out.println("date must follow the pattern of \"yyyy-mm-dd\"");
+        } catch (InputException e) {
+            System.err.println(e.getMessage());
             return;
         }
 
@@ -153,12 +148,16 @@ public class Command {
      */
     public void setTaskCompleted(int id) throws JAXBException {
 
-        for(Task task : toDoList.getNewTasks()){
+        for(Task task : toDoList.getTasks()){
             if (task.getId()==id){
-                task.setStatus("done");
-                task.setComplete(LocalDate.now());
-                System.out.println("Task " + id + " status set to \"done\"");
-                marshall(toDoList);
+                if(task.getStatus().equals("new")){
+                    task.setStatus("done");
+                    task.setComplete(LocalDate.now());
+                    marshall(toDoList);
+                    System.out.println("Task " + id + " status set to \"done\"");
+                }else {
+                    System.out.println("the task is already done");
+                }
                 return;
             }
         }
@@ -173,7 +172,13 @@ public class Command {
 
         for (Task task : toDoList.getTasks()){
             if (task.getId()==id){
-               userInput.inputParams(task);
+                try{
+                    userInput.inputParams(task);
+                }
+                catch (InputException e){
+                    System.err.println(e.getMessage());
+                    return;
+                }
                marshall(toDoList);
                System.out.println("The task " + id + " was edited!");
                return;
@@ -200,8 +205,8 @@ public class Command {
     //TODO возможно переделать алгоритм замены \\s(пробелов), для случаев когда введенное id с пробелами - "5 5"
     public int findId(String line, String letters) {
 
-        line = line.replaceAll(letters,"");
-        line = line.replaceAll("\\s","");
+        line = line.replace(letters,"");
+        line = line.replace("\\s","");
 
         if(line.matches("[0-9]+")){
             return Integer.parseInt(line);
@@ -211,13 +216,13 @@ public class Command {
         }
     }
 
-    public String getLetters(String inpitLine){
+    public String getLetters(String inputLine){
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        for(int i=0; i<inpitLine.length(); i++){
-            if(Character.isDigit(inpitLine.charAt(i))) break;
-            stringBuilder.append(inpitLine.charAt(i));
+        for(int i=0; i<inputLine.length(); i++){
+            if(Character.isDigit(inputLine.charAt(i))) break;
+            stringBuilder.append(inputLine.charAt(i));
         }
         if(Character.isWhitespace(stringBuilder.charAt(stringBuilder.length()-1))){
             return stringBuilder.substring(0, stringBuilder.length()-1);
