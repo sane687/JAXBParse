@@ -25,20 +25,18 @@ public class Task {
 
     @Override
     public String toString(){
-        String result;
-        result ="\n"+"id: "+getId() +
+        String result =
+                "\n"+"id: "+getId() +
                 "\ncaption: "+ getCaption() +
                 "\ndescription: "+ getDescription() +
                 "\npriority: "+ getPriority() +
                 "\ndeadline: " +getDeadline() +
-                "\nstatus: " + getStatus() +
-                "\ncomplete: " +getComplete();
+                "\nstatus: " + getStatus();
+        if (getComplete() != null) result += "\ncomplete: " +getComplete();
         return result;
-
     }
 
     public Task(){}
-
 
     public void setId(int id) {
         this.id = id;

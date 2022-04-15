@@ -26,35 +26,33 @@ public class UserInput {
     /**
      * Реализует логику ввода параметров нового задания, с вызовом метода создания
      * @throws IOException
-     * @throws JAXBException
      */
     public void inputParams(Task task) throws IOException, InputException {
+        String priorityPattern = "\\b([1-9]|[1-9][0-9]|100)\\b";
+        String deadlinePattern = "\\b(20)[2-9][2-9]-([0][1-9]|[1][0-2])-([0][1-9]|[1][0-2])\\b";
 
-        //TODO ВАЛИДАЦИЯ ПОЛЕЙ
         System.out.print("Insert caption: ");
         task.setCaption(reader.readLine());
+
         System.out.print("Insert description: ");
         task.setDescription(reader.readLine());
+
+
         System.out.print("Insert priority: ");
-
-        try{
-            task.setPriority(Integer.parseInt(reader.readLine()));
-            if (task.getPriority() < 1 || task.getPriority() > 100) {
-                throw new InputException("priority must be between 1 and 100");
-            }
-            System.out.print("Insert deadline: ");
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-            task.setDeadline(LocalDate.parse(reader.readLine(),formatter));
-        }
-        catch (DateTimeParseException exp){
-            throw new InputException("date must follow the pattern of \"yyyy-mm-dd\"");
-        }
-        catch (NumberFormatException e){
-            throw new InputException("incorrect number");
+        String inputLine = reader.readLine();
+        if(inputLine.matches(priorityPattern)){
+            task.setPriority(Integer.parseInt(inputLine));
+        } else {
+            throw new InputException("priority must be between 1 and 100");
         }
 
-        //TODO ЗАМЕНИТЬ СЧИТЫВАНИЕ ДАТЫ
-
+        System.out.print("Insert deadline: ");
+        inputLine = reader.readLine();
+        if(inputLine.matches(deadlinePattern)){
+            task.setDeadline(LocalDate.parse(inputLine));
+        } else {
+            throw new InputException("the date must be in future and follow the pattern \"yyyy-MM-dd\"");
+        }
 }
 }
 

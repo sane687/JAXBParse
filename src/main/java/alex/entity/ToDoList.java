@@ -1,7 +1,10 @@
 package alex.entity;
 
 import javax.xml.bind.annotation.*;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Класс представляет корневой елемент файла
@@ -37,20 +40,13 @@ public class ToDoList {
         return tasks;
     }
 
-    public void setTasks(List<Task> tasks) {
-        this.tasks = tasks;
-    }
 
     public List<Task> getNewTasks(){
-        List<Task> newTasks = getTasks();
-        newTasks.removeIf(task -> !task.getStatus().equals("new"));
-        return newTasks;
+        return getTasks().stream().filter(task -> task.getStatus().equals("new")).collect(Collectors.toList());
     }
 
     public List<Task> getCompletedTasks(){
-        List<Task> completedTasks = tasks;
-        completedTasks.removeIf(task -> !task.getStatus().equals("done"));
-        return completedTasks;
+        return getTasks().stream().filter(task -> task.getStatus().equals("done")).collect(Collectors.toList());
     }
 
 

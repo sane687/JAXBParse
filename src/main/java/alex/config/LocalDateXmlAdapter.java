@@ -4,6 +4,9 @@ import javax.xml.bind.annotation.adapters.XmlAdapter;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * Класс для преобразование строковой даты в LocalDate и наоборот
+ */
 public class LocalDateXmlAdapter extends XmlAdapter<String,LocalDate> {
 
     private final DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");

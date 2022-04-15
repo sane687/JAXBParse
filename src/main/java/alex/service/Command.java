@@ -14,7 +14,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,7 +21,6 @@ import java.util.Map;
  * Класс реализующий методы обработки пользовательских запросов
  */
 public class Command {
-
 
     private static final Map<String, String> commandsAndMethodsMap = new HashMap<>();
 
@@ -37,39 +35,57 @@ public class Command {
         commandsAndMethodsMap.put("remove","removeTask");
     }
 
-
     private final ToDoList toDoList;
     private final UserInput userInput = new UserInput();
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+    public Command(ToDoList toDoList) {
+        this.toDoList = toDoList;
+    }
+
     /**
      * Цикл с вводом комманд и значений пользователем
      */
-    public void run() throws IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public void run() throws IOException, InvocationTargetException, IllegalAccessException {
         Method method;
+        String inputLine;
 
         while (true){
-            String inputLine = reader.readLine();
-            String inputLetters = getLetters(inputLine);
+            inputLine = reader.readLine();
+            String inputLetters="";
+            int inputId=0;
+
+            if(inputLine.matches("\\D+")) {
+                if(!commandsAndMethodsMap.containsKey(inputLine)){
+                    System.out.println("no such method");
+                    continue;
+                }
+            } else if (inputLine.matches("^\\D+[\\d]+")) {
+                inputLetters = inputLine.replaceAll(" +?\\d+", "");
+                inputId = Integer.parseInt(inputLine.replaceAll("^\\D+", ""));
+
+                if(!commandsAndMethodsMap.containsKey(inputLetters)) {
+                    System.out.println("no such method");
+                    continue;
+                }
+
+            } else {
+                System.out.println("incorrect command. Type \"help\" for info");
+                continue;
+            }
 
             try {
-                if (inputLine.equals(inputLetters)) {
+                if (inputLetters.equals("") || inputId==0) {
                     method = Command.class.getMethod(commandsAndMethodsMap.get(inputLine));
                     method.invoke(this);
                 } else {
-                    int id = findId(inputLine, inputLetters);
-                    if (id == 0) continue;
                     method = Command.class.getMethod(commandsAndMethodsMap.get(inputLetters), int.class);
-                    method.invoke(this, id);
+                    method.invoke(this, inputId);
                 }
             } catch (NoSuchMethodException | NullPointerException exp) {
-                System.err.println("incorrect command name. Use \"help\" command");
+                System.err.println("incorrect command name. Type \"help\" for info");
             }
         }
-    }
-
-    public Command(ToDoList toDoList) {
-        this.toDoList = toDoList;
     }
 
     /**
@@ -200,34 +216,6 @@ public class Command {
         } else {
             System.out.println("no task with such id");
         }
-    }
-
-    //TODO возможно переделать алгоритм замены \\s(пробелов), для случаев когда введенное id с пробелами - "5 5"
-    public int findId(String line, String letters) {
-
-        line = line.replace(letters,"");
-        line = line.replace("\\s","");
-
-        if(line.matches("[0-9]+")){
-            return Integer.parseInt(line);
-        } else {
-            System.out.println("incorrect number");
-            return 0;
-        }
-    }
-
-    public String getLetters(String inputLine){
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        for(int i=0; i<inputLine.length(); i++){
-            if(Character.isDigit(inputLine.charAt(i))) break;
-            stringBuilder.append(inputLine.charAt(i));
-        }
-        if(Character.isWhitespace(stringBuilder.charAt(stringBuilder.length()-1))){
-            return stringBuilder.substring(0, stringBuilder.length()-1);
-        }
-        return stringBuilder.toString();
     }
 
 }
