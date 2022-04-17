@@ -1,19 +1,14 @@
 package alex.service;
 
 import alex.entity.Task;
-import alex.exceptions.InputException;
 
-import javax.xml.bind.JAXBException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 
 /**
- * Класс реализующий ввод пользователем параметров для создания нового задания
- * и редактирование существующего
+ * Класс реализующий ввод пользователем параметров для создания нового задания или редактирование существующего
  */
 public class UserInput {
 
@@ -24,10 +19,11 @@ public class UserInput {
     }
 
     /**
-     * Реализует логику ввода параметров нового задания, с вызовом метода создания
-     * @throws IOException
+     * Реализует логику ввода параметров нового задания
+     * @param task Объект задания.
+     * @throws IOException ошибка считывания
      */
-    public void inputParams(Task task) throws IOException, InputException {
+    public void inputParams(Task task) throws IOException {
         String priorityPattern = "\\b([1-9]|[1-9][0-9]|100)\\b";
         String deadlinePattern = "\\b(20)[2-9][2-9]-([0][1-9]|[1][0-2])-([0][1-9]|[1][0-2])\\b";
 
@@ -37,13 +33,12 @@ public class UserInput {
         System.out.print("Insert description: ");
         task.setDescription(reader.readLine());
 
-
         System.out.print("Insert priority: ");
         String inputLine = reader.readLine();
         if(inputLine.matches(priorityPattern)){
             task.setPriority(Integer.parseInt(inputLine));
         } else {
-            throw new InputException("priority must be between 1 and 100");
+            throw new IOException("priority must be between 1 and 100");
         }
 
         System.out.print("Insert deadline: ");
@@ -51,7 +46,7 @@ public class UserInput {
         if(inputLine.matches(deadlinePattern)){
             task.setDeadline(LocalDate.parse(inputLine));
         } else {
-            throw new InputException("the date must be in future and follow the pattern \"yyyy-MM-dd\"");
+            throw new IOException("the date must be in future and follow the pattern \"yyyy-MM-dd\"");
         }
 }
 }

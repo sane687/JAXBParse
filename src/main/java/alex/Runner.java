@@ -11,10 +11,9 @@ import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Класс реализующий чтение xml файла.
- * Реализует выбор комманд для работы с xml файлом
+ * Класс реализующий чтение xml файла, с вызовом метода {@link alex.service.Command#run()}
  */
-public class User {
+public class Runner {
     public static void main(String[] args) throws IOException, InvocationTargetException, IllegalAccessException {
 
         File file = new File("ToDoList.xml");

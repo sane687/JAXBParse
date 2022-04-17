@@ -2,7 +2,6 @@ package alex.service;
 
 import alex.entity.Task;
 import alex.entity.ToDoList;
-import alex.exceptions.InputException;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -22,6 +21,9 @@ import java.util.Map;
  */
 public class Command {
 
+    /**
+     * Поле содержащее название команды и выполняемый им метод
+     */
     private static final Map<String, String> commandsAndMethodsMap = new HashMap<>();
 
     static {
@@ -35,7 +37,11 @@ public class Command {
         commandsAndMethodsMap.put("remove","removeTask");
     }
 
+    /**
+     * Поле содержащее весь xml документ в объектном представлении
+     */
     private final ToDoList toDoList;
+
     private final UserInput userInput = new UserInput();
     private final BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -44,9 +50,12 @@ public class Command {
     }
 
     /**
-     * Цикл с вводом комманд и значений пользователем
+     * Цикл с вводом комманд пользователя. Команда проверяется на валидность регулярным выражениям.
+     * В случае соответствия ищется ключ соответствующий введенному значению. Если ключ найден,
+     * то вызывается метод с названием соответствующем значению ключа.
      */
-    public void run() throws IOException, InvocationTargetException, IllegalAccessException {
+    public void run() throws IOException {
+
         Method method;
         String inputLine;
 
@@ -82,8 +91,9 @@ public class Command {
                     method = Command.class.getMethod(commandsAndMethodsMap.get(inputLetters), int.class);
                     method.invoke(this, inputId);
                 }
-            } catch (NoSuchMethodException | NullPointerException exp) {
+            } catch (NoSuchMethodException | NullPointerException | IllegalAccessException | InvocationTargetException exp) {
                 System.err.println("incorrect command name. Type \"help\" for info");
+                return;
             }
         }
     }
@@ -100,6 +110,9 @@ public class Command {
         marshaller.marshal(toDoList, new File("ToDoList.xml"));
     }
 
+    /**
+     * Вызов списка команд
+     */
     public void help(){
         System.out.println("Commands: " + "\n"
                 + "\"list -s new\" get all new tasks" + "\n"
@@ -138,13 +151,12 @@ public class Command {
      * Создает новое задание с указанными параметрами
      * @throws JAXBException
      */
-
-    public void createNewTask() throws JAXBException, IOException {
+    public void createNewTask() throws JAXBException {
 
         Task task = new Task();
         try{
             userInput.inputParams(task);
-        } catch (InputException e) {
+        } catch (IOException e) {
             System.err.println(e.getMessage());
             return;
         }
@@ -181,17 +193,18 @@ public class Command {
     }
 
     /**
-     *
+     * Редактирует выбранное задание
+     * @param id идентификатор задания
      * @throws JAXBException
      */
-    public void editTask(int id) throws JAXBException, IOException {
+    public void editTask(int id) throws JAXBException  {
 
         for (Task task : toDoList.getTasks()){
             if (task.getId()==id){
                 try{
                     userInput.inputParams(task);
                 }
-                catch (InputException e){
+                catch (IOException e){
                     System.err.println(e.getMessage());
                     return;
                 }

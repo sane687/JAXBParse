@@ -9,12 +9,15 @@ import java.util.stream.Collectors;
 /**
  * Класс представляет корневой елемент файла
  * Аннотациями помечен корневой элемент и лист вложенных елементов,
- * которые представляют собой объекты с задание (см. класс Task)
+ * которые представляют собой объекты с задание {@link Task}
  */
 @XmlRootElement(name = "toDoList")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ToDoList {
 
+    /**
+     * Поле хранящее все задания из корневого елемента
+     */
     @XmlElement(name = "task")
     private List<Task> tasks;
 
@@ -24,9 +27,9 @@ public class ToDoList {
     }
 
     /**
-     * Лист содержащий все елементы в корневой папке
+     * Вычисление максимального id всех заданий.
+     * @return максимально значение user.id
      */
-
     public int maxId(){
         int maxId = 1;
         for(Task task : tasks){
@@ -39,7 +42,6 @@ public class ToDoList {
     public List<Task> getTasks() {
         return tasks;
     }
-
 
     public List<Task> getNewTasks(){
         return getTasks().stream().filter(task -> task.getStatus().equals("new")).collect(Collectors.toList());

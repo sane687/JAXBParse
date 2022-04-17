@@ -8,11 +8,9 @@ import java.time.LocalDate;
 
 /**
  * Класс для объектов задания корневого элемента
- * Class for the elements of the root element xml
  * Аннотацией "@XmlElement" помечены параметры задания
  * Аннотацией "@XmlAttribute" почечены атрибуты задания
  */
-
 public class Task {
 
     private String caption;
